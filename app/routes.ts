@@ -5,4 +5,5 @@ export default [
     route("projeto/create", "./pages/project/create.project.tsx"),
     route("projeto/update/:id", "./pages/project/update.project.tsx"),
     route("help", "routes/home.tsx"),
+
 ] satisfies RouteConfig

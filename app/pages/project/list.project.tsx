@@ -1,10 +1,11 @@
 import React from "react"
 import { NavLink, useNavigate } from "react-router"
-
-import type { Route } from "./+types/list.project"
+import { useDispatch, useSelector } from 'react-redux'
 
 import type { Project } from "~/models"
-import * as projectRepo from '../../services/project.repo'
+import type { Route } from "./+types/list.project"
+
+import * as projectSlice from '../../store/project.slice'
 
 import ProjectItem from "./item.project"
 
@@ -18,16 +19,28 @@ export function meta({}: Route.MetaArgs) {
 export default function ProjectList() {
 
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
-    const [projects, setProjects] = React.useState(projectRepo.getProjects())
+    const projectList = useSelector((state: projectSlice.ProjectState) => state.projects)
+
+    const [projects, setProjects] = React.useState(projectList.sort((a, b) => {
+        if (a.deadline && b.deadline) {
+            
+            const dateA = new Date(`${a.deadline} GMT-03:00`)
+            const dateB = new Date(`${b.deadline} GMT-03:00`)
+
+            return dateA.getTime() - dateB.getTime()
+        }
+        return 0
+    }))
 
     function onEdit(project: Project) {
+        projectSlice.selectedProject(dispatch, project.id!)
         navigate(`/projeto/update/${project.id}`)
     }
 
     function onDelete(project: Project) {
-        projectRepo.deleteProject(project.id!)
-        setProjects(projectRepo.getProjects())
+        projectSlice.deleteProject(dispatch, project.id!)
     }
 
     return (

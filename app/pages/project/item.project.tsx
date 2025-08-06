@@ -10,20 +10,27 @@ type Props = {
 
 export default function ProjectItem({ project, onEdit, onDelete }: Props) {
 
-    function format(date: Date | undefined): string {
-        if (!date) return "Sem prazo definido"
-        date = new Date(date)
+    function format(deadline: string | undefined): string {
+        if (!deadline) return "Sem prazo definido"
+        const date = new Date(`${deadline} GMT-03:00`)
         return `Prazo: ${date.toLocaleDateString('pt-BR')}`
     }
 
-    function onDeadline(deadline: Date | undefined): boolean {
-        if (!deadline) return true
-        deadline = new Date(deadline)
-        return deadline.getTime() >= new Date().getTime()
+    function getColorStatus(project: Project) {
+        if (project.done) return 'color-green'
+
+        let deadline = undefined
+        if (project.deadline) deadline = new Date(`${project.deadline} GMT-03:00`)
+
+        if (deadline && deadline.getTime() < new Date().getTime()) {
+            return 'color-orange'
+        }
+
+        return ''
     }
 
     return (
-        <div className={`project-item ${onDeadline(project.deadline) ? '' : 'color-orange'}`}>
+        <div className={`project-item ${getColorStatus(project)}`}>
             <div>
                 {project.name}
             </div>

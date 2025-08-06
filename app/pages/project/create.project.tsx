@@ -1,9 +1,11 @@
 import React from "react"
-import { useNavigate, useParams } from "react-router"
+import { useDispatch } from "react-redux"
+import { useNavigate } from "react-router"
 
 import type { Route } from "./+types/list.project"
 
-import { addProject } from "../../services/project.repo"
+import { addProject } from '../../store/project.slice'
+
 import MyInput from "~/components/my.input"
 
 export function meta({}: Route.MetaArgs) {
@@ -15,6 +17,7 @@ export function meta({}: Route.MetaArgs) {
 export default function CreateProject() {
 
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const [name, setName] = React.useState("")
     const [description, setDescription] = React.useState("")
@@ -30,10 +33,8 @@ export default function CreateProject() {
             return
         }
 
-        let date = undefined
-        if (deadline && deadline != '') date = new Date(`${deadline} GMT-03:00`)
+        addProject(dispatch, { name, description, deadline, done: false })
 
-        addProject({ name, description, deadline: date })
         goBack()
     }
 
@@ -52,7 +53,6 @@ export default function CreateProject() {
                     <span className="mr-5">Descrição:</span>
                     <textarea className="my-input" onChange={(e) => setDescription(e.target.value)} />
                 </div>
-
             </main>
             
             <footer className="footer">

@@ -1,9 +1,10 @@
 import React from "react"
 import { useNavigate, useParams } from "react-router"
+import { useDispatch, useSelector } from "react-redux"
 
 import type { Route } from "./+types/list.project"
 
-import * as projectRepo from "../../services/project.repo"
+import * as projectSlice from "../../store/project.slice"
 import MyInput from "~/components/my.input"
 
 export function meta({}: Route.MetaArgs) {
@@ -16,14 +17,16 @@ export default function UpdateProject() {
 
     const navigate = useNavigate()
     const route = useParams<{ id: string }>()
-
-    const project = projectRepo.getProject(Number(route.id!))
+    
+    const dispatch = useDispatch()
+    const project = useSelector((state: projectSlice.ProjectState) => state.selected)
 
     if (!project) return <div className="container">Projeto não encontrado!</div>
 
     const [name, setName] = React.useState(project.name)
     const [description, setDescription] = React.useState(project.description || "")
-    const [deadline, setDeadline] = React.useState(project.deadline ? project.deadline.toISOString().substring(0, 10) : "")
+    const [deadline, setDeadline] = React.useState(project.deadline || "")
+    const [done, setDone] = React.useState(project.done)
 
     function goBack() {
         navigate(-1)
@@ -35,10 +38,7 @@ export default function UpdateProject() {
             return
         }
 
-        let date = undefined
-        if (deadline && deadline != '') date = new Date(`${deadline} GMT-03:00`)
-
-        projectRepo.updateProject({ ...project, name, description, deadline: date })
+        projectSlice.updateProject(dispatch, { ...project, name, description, deadline, done })
         goBack()
     }
 
@@ -58,6 +58,10 @@ export default function UpdateProject() {
                     <textarea className="my-input" value={description} onChange={(e) => setDescription(e.target.value)} />
                 </div>
 
+                <div className="flex mt-5">
+                    <span className="mr-5">Concluído:</span>
+                    <input className="w-[24px]" type="checkbox" checked={done} onChange={(e) => setDone(e.target.checked)} />
+                </div>
             </main>
             
             <footer className="footer">
