@@ -31,9 +31,7 @@ export default function ProjectItem({ project, onEdit, onDelete }: Props) {
 
     return (
         <div className={`project-item ${getColorStatus(project)}`}>
-            <div>
-                {project.name}
-            </div>
+            <div>{project.id} - {project.name}</div>
             <div className="flex">
                 <div style={{ textAlign: 'center', width: '200px', marginLeft: '20px', marginRight: '20px' }}>
                     {format(project.deadline)}

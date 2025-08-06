@@ -21,18 +21,7 @@ export default function ProjectList() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const projectList = useSelector((state: projectSlice.ProjectState) => state.projects)
-
-    const [projects, setProjects] = React.useState(projectList.sort((a, b) => {
-        if (a.deadline && b.deadline) {
-            
-            const dateA = new Date(`${a.deadline} GMT-03:00`)
-            const dateB = new Date(`${b.deadline} GMT-03:00`)
-
-            return dateA.getTime() - dateB.getTime()
-        }
-        return 0
-    }))
+    const projects = useSelector((state: projectSlice.ProjectState) => state.projects)
 
     function onEdit(project: Project) {
         projectSlice.selectedProject(dispatch, project.id!)

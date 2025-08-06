@@ -21,11 +21,12 @@ export const store = configureStore({
     reducer: persistReducer(
         {
             key: projectSlice.name,
-            storage: myStorage
+            storage: myStorage,
         },
         projectSlice.reducer
     ),
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+        thunk: true,
         serializableCheck: {
             ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
         }

@@ -7,6 +7,24 @@ export type ProjectState = {
     selected?: Project
 }
 
+function sortProjects(a: Project, b: Project)  {
+    if (a.done != b.done) {
+        if (a.done) return 1
+        if (b.done) return -1
+    }
+    
+    if (!a.deadline) return 1
+    if (!b.deadline) return -1
+
+    if (a.deadline && b.deadline) {
+        const dateA = new Date(`${a.deadline} GMT-03:00`)
+        const dateB = new Date(`${b.deadline} GMT-03:00`)
+
+        return dateA.getTime() - dateB.getTime()
+    }
+    return 0
+}
+
 export const projectSlice = createSlice({
     name: 'project_app',
 
@@ -17,11 +35,13 @@ export const projectSlice = createSlice({
 
     reducers: {
         selectProject: (state, action) => {
-            state.selected = state.projects.find(p => p.id == action.payload)
+            state.selected = state.projects.find(p => p.id == action.payload.id)
         },
         addProject: (state, action) => {
-            action.payload.id = state.projects.length + 1
-            state.projects = [...state.projects, action.payload]
+            state.projects = [
+                ...state.projects,
+                { ...action.payload, id: state.projects.length + 1 }
+            ].sort(sortProjects)
         },
         updateProject: (state, action) => {
             const project = state.projects.find(p => p.id == action.payload.id)
@@ -31,15 +51,16 @@ export const projectSlice = createSlice({
                 project.deadline = action.payload.deadline
                 project.description = action.payload.description
             }
+            state.projects = state.projects.sort(sortProjects)
         },
         deleteProject: (state, action) => {
-            state.projects = state.projects.filter(p => p.id != action.payload)
+            state.projects = state.projects.filter(p => p.id != action.payload.id)
         }
     }
 })
 
 export function selectedProject(dispatch: Dispatch<any>, id: number) {
-    dispatch(projectSlice.actions.selectProject(id))
+    dispatch(projectSlice.actions.selectProject({ id }))
 }
 
 export function addProject(dispatch: Dispatch<any>, project: Project) {
@@ -51,5 +72,5 @@ export function updateProject(dispatch: Dispatch<any>, project: Project) {
 }
 
 export function deleteProject(dispatch: Dispatch<any>, id: number) {
-    dispatch(projectSlice.actions.deleteProject(id))
+    dispatch(projectSlice.actions.deleteProject({ id }))
 }

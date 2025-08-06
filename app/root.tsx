@@ -35,7 +35,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
     return (
         <Provider store={store}>
-            <PersistGate loading={null} persistor={persistor}>
+            <PersistGate persistor={persistor}>
                 <Outlet />
             </PersistGate>
         </Provider>
