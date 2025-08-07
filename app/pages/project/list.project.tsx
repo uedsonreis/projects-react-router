@@ -1,4 +1,5 @@
 import React from "react"
+import { IoSunny } from 'react-icons/io5'
 import { NavLink, useNavigate } from "react-router"
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -6,6 +7,7 @@ import type { Project } from "~/models"
 import type { Route } from "./+types/list.project"
 
 import * as projectSlice from '../../store/project.slice'
+import { setThemeAction, type ThemeState } from "~/store/theme.slice"
 
 import ProjectItem from "./item.project"
 
@@ -21,7 +23,8 @@ export default function ProjectList() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    const projects = useSelector((state: projectSlice.ProjectState) => state.projects)
+    const { mode } = useSelector((state: { theme: ThemeState }) => state.theme)
+    const projects = useSelector((state: { project: projectSlice.ProjectState }) => state.project.projects)
 
     function onEdit(project: Project) {
         projectSlice.selectedProject(dispatch, project.id!)
@@ -33,9 +36,10 @@ export default function ProjectList() {
     }
 
     return (
-        <div className="container">
+        <div className={`page ${mode}`}>
             <header className="header">
                 <h2>Lista de Projetos</h2>
+                <IoSunny className="themeIcon" onClick={() => setThemeAction(dispatch)} />
             </header>
 
             <main className="w-full">

@@ -1,9 +1,10 @@
 import React from "react"
-import { useDispatch } from "react-redux"
 import { useNavigate } from "react-router"
+import { useDispatch, useSelector } from "react-redux"
 
 import type { Route } from "./+types/list.project"
 
+import type { ThemeState } from "~/store/theme.slice"
 import { addProject } from '../../store/project.slice'
 
 import MyInput from "~/components/my.input"
@@ -23,6 +24,8 @@ export default function CreateProject() {
     const [description, setDescription] = React.useState("")
     const [deadline, setDeadline] = React.useState("")
 
+    const { mode } = useSelector((state: { theme: ThemeState }) => state.theme)
+
     function goBack() {
         navigate(-1)
     }
@@ -39,7 +42,7 @@ export default function CreateProject() {
     }
 
     return (
-        <div className="container">
+        <div className={`page ${mode}`}>
             <header className="header">
                 <h2>Criar novo Projeto</h2>
             </header>

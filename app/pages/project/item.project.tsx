@@ -37,7 +37,7 @@ export default function ProjectItem({ project, onEdit, onDelete }: Props) {
                     {format(project.deadline)}
                 </div>
 
-                <button className="my-button color-cyan" onClick={() => onEdit(project)}>Alterar</button>
+                <button className="my-button color-blue" onClick={() => onEdit(project)}>Alterar</button>
                 <button className="my-button color-red" onClick={() => onDelete(project)}>Remover</button>
             </div>
         </div>

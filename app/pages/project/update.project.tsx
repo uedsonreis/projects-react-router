@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router"
 import { useDispatch, useSelector } from "react-redux"
 
 import type { Route } from "./+types/list.project"
+import type { ThemeState } from "~/store/theme.slice"
 
 import * as projectSlice from "../../store/project.slice"
 import MyInput from "~/components/my.input"
@@ -19,9 +20,10 @@ export default function UpdateProject() {
     const route = useParams<{ id: string }>()
     
     const dispatch = useDispatch()
-    const project = useSelector((state: projectSlice.ProjectState) => state.selected)
+    const { mode } = useSelector((state: { theme: ThemeState }) => state.theme)
+    const project = useSelector((state: { project: projectSlice.ProjectState }) => state.project.selected)
 
-    if (!project) return <div className="container">Projeto não encontrado!</div>
+    if (!project) return <div className={`page ${mode}`}>Projeto não encontrado!</div>
 
     const [name, setName] = React.useState('')
     const [description, setDescription] = React.useState('')
@@ -50,7 +52,7 @@ export default function UpdateProject() {
     }
 
     return (
-        <div className="container">
+        <div className={`page ${mode}`}>
             <header className="header">
                 <h2>Editar Projeto</h2>
             </header>

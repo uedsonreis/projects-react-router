@@ -1,7 +1,8 @@
 import storage from 'redux-persist/lib/storage'
-import { configureStore } from '@reduxjs/toolkit'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import { FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER, persistReducer, persistStore } from 'redux-persist'
 
+import { themeSlice } from './theme.slice'
 import { projectSlice } from "./project.slice"
 
 const myStorage = {
@@ -17,13 +18,18 @@ const myStorage = {
     },
 }
 
+const combinedReducer = combineReducers({
+    theme: themeSlice.reducer,
+    project: projectSlice.reducer
+})
+
 export const store = configureStore({
     reducer: persistReducer(
         {
             key: projectSlice.name,
             storage: myStorage,
         },
-        projectSlice.reducer
+        combinedReducer
     ),
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
         serializableCheck: {
