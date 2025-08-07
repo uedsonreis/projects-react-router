@@ -26,7 +26,6 @@ export const store = configureStore({
         projectSlice.reducer
     ),
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({
-        thunk: true,
         serializableCheck: {
             ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
         }

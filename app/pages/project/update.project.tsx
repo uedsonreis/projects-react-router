@@ -23,10 +23,17 @@ export default function UpdateProject() {
 
     if (!project) return <div className="container">Projeto não encontrado!</div>
 
-    const [name, setName] = React.useState(project.name)
-    const [description, setDescription] = React.useState(project.description || "")
-    const [deadline, setDeadline] = React.useState(project.deadline || "")
-    const [done, setDone] = React.useState(project.done)
+    const [name, setName] = React.useState('')
+    const [description, setDescription] = React.useState('')
+    const [deadline, setDeadline] = React.useState('')
+    const [done, setDone] = React.useState(false)
+
+    React.useEffect(() => {
+        setName(project.name)
+        setDone(project.done)
+        if (project.description) setDescription(project.description)
+        if (project.deadline) setDeadline(project.deadline)
+    }, [route.id])
 
     function goBack() {
         navigate(-1)
