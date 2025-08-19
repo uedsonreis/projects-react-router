@@ -24,7 +24,7 @@ export default function ProjectList() {
     const dispatch = useDispatch()
 
     const { mode } = useSelector((state: { theme: ThemeState }) => state.theme)
-    const projects = useSelector((state: { project: projectSlice.ProjectState }) => state.project.projects)
+    const { projects } = useSelector((state: { project: projectSlice.ProjectState }) => state.project)
 
     function onEdit(project: Project) {
         projectSlice.selectedProject(dispatch, project.id!)
