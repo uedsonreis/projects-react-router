@@ -10,6 +10,7 @@ import {
 import type { Route } from "./+types/root"
 
 import "./app.css"
+import PWABadge from "./components/PWABadge";
 
 export const links: Route.LinksFunction = () => [
     { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -32,6 +33,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <Meta />
                 <Links />
+                <link rel="manifest" href="/manifest.webmanifest" />
             </head>
             <body>
                 {children}
@@ -43,7 +45,12 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-    return <Outlet />;
+    return (
+        <>
+            <Outlet />
+            <PWABadge />
+        </>
+    );
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
