@@ -21,9 +21,17 @@ export default function UpdateProject() {
 
     if (!project) return <div className="container">Projeto não encontrado!</div>
 
-    const [name, setName] = React.useState(project.name)
-    const [description, setDescription] = React.useState(project.description || "")
-    const [deadline, setDeadline] = React.useState(project.deadline ? project.deadline.toISOString().substring(0, 10) : "")
+    const [name, setName] = React.useState('')
+    const [description, setDescription] = React.useState('')
+    const [deadline, setDeadline] = React.useState('')
+    const [done, setDone] = React.useState(false)
+
+    React.useEffect(() => {
+        setName(project.name)
+        setDone(project.done)
+        if (project.description) setDescription(project.description)
+        if (project.deadline) setDeadline(project.deadline)
+    }, [route.id])
 
     function goBack() {
         navigate(-1)
@@ -35,10 +43,7 @@ export default function UpdateProject() {
             return
         }
 
-        let date = undefined
-        if (deadline && deadline != '') date = new Date(`${deadline} GMT-03:00`)
-
-        projectRepo.updateProject({ ...project, name, description, deadline: date })
+        projectRepo.updateProject({ ...project, name, description, deadline, done })
         goBack()
     }
 
@@ -56,6 +61,11 @@ export default function UpdateProject() {
                 <div className="div-input">
                     <span className="mr-5">Descrição:</span>
                     <textarea className="my-input" value={description} onChange={(e) => setDescription(e.target.value)} />
+                </div>
+
+                <div className="flex mt-5">
+                    <span className="mr-5">Concluído:</span>
+                    <input className="w-[24px]" type="checkbox" checked={done} onChange={(e) => setDone(e.target.checked)} />
                 </div>
 
             </main>

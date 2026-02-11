@@ -30,10 +30,7 @@ export default function CreateProject() {
             return
         }
 
-        let date = undefined
-        if (deadline && deadline != '') date = new Date(`${deadline} GMT-03:00`)
-
-        addProject({ name, description, deadline: date })
+        addProject({ name, description, deadline, done: false })
         goBack()
     }
 
