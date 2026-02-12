@@ -5,6 +5,8 @@ import type { Route } from "./+types/list.project"
 
 import * as projectRepo from "../../services/project.repo"
 import MyInput from "~/components/my.input"
+import { useSelector } from "react-redux"
+import type { ThemeState } from "~/store/theme.slice"
 
 export function meta({}: Route.MetaArgs) {
     return [
@@ -20,6 +22,8 @@ export default function UpdateProject() {
     const project = projectRepo.getProject(Number(route.id!))
 
     if (!project) return <div className="container">Projeto não encontrado!</div>
+
+    const mode = useSelector((state: { theme: ThemeState }) => state.theme.mode)
 
     const [name, setName] = React.useState('')
     const [description, setDescription] = React.useState('')
@@ -48,7 +52,7 @@ export default function UpdateProject() {
     }
 
     return (
-        <div className="container">
+        <div className={`page ${mode}`}>
             <header className="header">
                 <h2>Editar Projeto</h2>
             </header>

@@ -1,4 +1,5 @@
 import React from "react"
+import { IoSunny } from 'react-icons/io5'
 import { NavLink, useNavigate } from "react-router"
 
 import type { Route } from "./+types/list.project"
@@ -7,6 +8,8 @@ import type { Project } from "~/models"
 import * as projectRepo from '../../services/project.repo'
 
 import ProjectItem from "./item.project"
+import { useDispatch, useSelector } from "react-redux"
+import { setThemeAction, type ThemeState } from "~/store/theme.slice"
 
 export function meta({}: Route.MetaArgs) {
     return [
@@ -18,6 +21,9 @@ export function meta({}: Route.MetaArgs) {
 export default function ProjectList() {
 
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+    const mode = useSelector((state: { theme: ThemeState }) => state.theme.mode)
 
     const [projects, setProjects] = React.useState(projectRepo.getProjects())
 
@@ -30,10 +36,15 @@ export default function ProjectList() {
         setProjects(projectRepo.getProjects())
     }
 
+    function toggleMode() {
+        setThemeAction(dispatch)
+    }
+
     return (
-        <div className="container">
+        <div className={"page "+ mode}>
             <header className="header">
                 <h2>Lista de Projetos</h2>
+                <IoSunny className="themeIcon" onClick={toggleMode} />
             </header>
 
             <main className="w-full">

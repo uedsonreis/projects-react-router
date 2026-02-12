@@ -6,15 +6,41 @@
 }
 
 html,
-body {
+body {}
+
+.dark {
     @apply bg-white dark:bg-gray-950;
 
     @media (prefers-color-scheme: dark) {
         color-scheme: dark;
     }
+
+    color: white;
+
+    .color-blue {
+        color: cyan;
+    }
+    .color-blue:hover {
+        border-color: cyan;
+    }
 }
 
-.container {
+.light {
+    @apply bg-white bg-gray-950;
+
+    @media (prefers-color-scheme: light) {
+        color-scheme: light;
+    }
+
+    .color-blue {
+        color: blue;
+    }
+    .color-blue:hover {
+        border-color: blue;
+    }
+}
+
+.page {
     width: 100%;
     padding: 40px;
     display: flex;
@@ -102,4 +128,9 @@ body {
     align-items: center;
     justify-content: space-between;
     border-bottom: 1px solid gray;
+}
+
+.themeIcon {
+    cursor: pointer;
+    margin-left: 10px;
 }

@@ -5,6 +5,8 @@ import type { Route } from "./+types/list.project"
 
 import { addProject } from "../../services/project.repo"
 import MyInput from "~/components/my.input"
+import { useSelector } from "react-redux"
+import type { ThemeState } from "~/store/theme.slice"
 
 export function meta({}: Route.MetaArgs) {
     return [
@@ -15,6 +17,8 @@ export function meta({}: Route.MetaArgs) {
 export default function CreateProject() {
 
     const navigate = useNavigate()
+
+    const mode = useSelector((state: { theme: ThemeState }) => state.theme.mode)
 
     const [name, setName] = React.useState("")
     const [description, setDescription] = React.useState("")
@@ -35,7 +39,7 @@ export default function CreateProject() {
     }
 
     return (
-        <div className="container">
+        <div className={`page ${mode}`}>
             <header className="header">
                 <h2>Criar novo Projeto</h2>
             </header>
