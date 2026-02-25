@@ -1,12 +1,12 @@
 import React from "react"
-import { useNavigate, useParams } from "react-router"
+import { useNavigate } from "react-router"
+import { useDispatch, useSelector } from "react-redux"
 
 import type { Route } from "./+types/list.project"
 
-import { addProject } from "../../services/project.repo"
 import MyInput from "~/components/my.input"
-import { useSelector } from "react-redux"
 import type { ThemeState } from "~/store/theme.slice"
+import { addProjectAction } from "~/store/project.slice"
 
 export function meta({}: Route.MetaArgs) {
     return [
@@ -17,6 +17,7 @@ export function meta({}: Route.MetaArgs) {
 export default function CreateProject() {
 
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     const mode = useSelector((state: { theme: ThemeState }) => state.theme.mode)
 
@@ -34,7 +35,7 @@ export default function CreateProject() {
             return
         }
 
-        addProject({ name, description, deadline, done: false })
+        addProjectAction(dispatch, { name, description, deadline, done: false })
         goBack()
     }
 

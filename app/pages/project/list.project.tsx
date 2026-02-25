@@ -1,15 +1,13 @@
 import React from "react"
 import { IoSunny } from 'react-icons/io5'
 import { NavLink, useNavigate } from "react-router"
+import { useDispatch, useSelector } from "react-redux"
 
 import type { Route } from "./+types/list.project"
-
 import type { Project } from "~/models"
-import * as projectRepo from '../../services/project.repo'
-
 import ProjectItem from "./item.project"
-import { useDispatch, useSelector } from "react-redux"
 import { setThemeAction, type ThemeState } from "~/store/theme.slice"
+import { deleteProjectAction, type ProjectState } from "~/store/project.slice"
 
 export function meta({}: Route.MetaArgs) {
     return [
@@ -24,16 +22,14 @@ export default function ProjectList() {
     const dispatch = useDispatch()
 
     const mode = useSelector((state: { theme: ThemeState }) => state.theme.mode)
-
-    const [projects, setProjects] = React.useState(projectRepo.getProjects())
+    const projects = useSelector((state: { project: ProjectState }) => state.project.projects)
 
     function onEdit(project: Project) {
         navigate(`/projeto/update/${project.id}`)
     }
 
     function onDelete(project: Project) {
-        projectRepo.deleteProject(project.id!)
-        setProjects(projectRepo.getProjects())
+        deleteProjectAction(dispatch, project.id!)
     }
 
     function toggleMode() {

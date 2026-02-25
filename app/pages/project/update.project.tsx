@@ -3,10 +3,10 @@ import { useNavigate, useParams } from "react-router"
 
 import type { Route } from "./+types/list.project"
 
-import * as projectRepo from "../../services/project.repo"
 import MyInput from "~/components/my.input"
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import type { ThemeState } from "~/store/theme.slice"
+import { updateProjectAction, type ProjectState } from "~/store/project.slice"
 
 export function meta({}: Route.MetaArgs) {
     return [
@@ -17,9 +17,12 @@ export function meta({}: Route.MetaArgs) {
 export default function UpdateProject() {
 
     const navigate = useNavigate()
+    const dispatch = useDispatch()
     const route = useParams<{ id: string }>()
 
-    const project = projectRepo.getProject(Number(route.id!))
+    const projects = useSelector((state: { project: ProjectState }) => state.project.projects)
+
+    const project = projects.find(p => p.id === Number(route.id!))
 
     if (!project) return <div className="container">Projeto não encontrado!</div>
 
@@ -47,7 +50,7 @@ export default function UpdateProject() {
             return
         }
 
-        projectRepo.updateProject({ ...project, name, description, deadline, done })
+        updateProjectAction(dispatch, { ...project, name, description, deadline, done })
         goBack()
     }
 

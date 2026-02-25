@@ -8,10 +8,11 @@ import {
 } from "react-router"
 
 import { Provider } from 'react-redux'
+import { PersistGate } from "redux-persist/integration/react"
 
 import type { Route } from "./+types/root"
 
-import { store } from "./store"
+import { store, persistor } from "./store"
 
 import "./app.css"
 
@@ -49,7 +50,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export default function App() {
     return (
         <Provider store={store}>
-            <Outlet />
+            <PersistGate loading={null} persistor={persistor}>
+                <Outlet />
+            </PersistGate>
         </Provider>
     )
 }
