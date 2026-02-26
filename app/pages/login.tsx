@@ -1,5 +1,5 @@
 
-const url = 'https://github.com/login/oauth/authorize?scope=user:email&client_id='
+const url = 'https://github.com/login/oauth/authorize?scope=user:email&client_id=' + import.meta.env.VITE_CLIENT_ID
 
 export default function LoginPage() {
 
