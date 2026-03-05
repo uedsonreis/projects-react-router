@@ -12,6 +12,7 @@ import { PersistGate } from "redux-persist/integration/react"
 
 import type { Route } from "./+types/root"
 
+import PWABadge from "./components/PWABadge"
 import { store, persistor } from "./store"
 
 import "./app.css"
@@ -37,6 +38,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
                 <Meta />
                 <Links />
+                <link rel="manifest" href="/manifest.webmanifest" />
             </head>
             <body>
                 {children}
@@ -52,6 +54,7 @@ export default function App() {
         <Provider store={store}>
             <PersistGate loading={null} persistor={persistor}>
                 <Outlet />
+                <PWABadge />
             </PersistGate>
         </Provider>
     )
